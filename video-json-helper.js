@@ -86,6 +86,51 @@ function replacer(key, value) {
     return value;
 }
 /*
+    check the aid and bvid number, if error, just throw error.
+*/
+function vidNoCheck(bvid) {
+    var letter = bvid.substring(0, 2).toLowerCase();
+    var num = bvid.substring(2);
+    if (letter === "bv") {
+        var api_bv = api.concat("bvid=").concat(bvid);
+        return api_bv;
+    }
+    else if (letter === "av") {
+        var api_av = api.concat("aid=").concat(num);
+        return api_av;
+    }
+    else {
+        console.error('You should put avid and bvid');
+        // console.log(letter)
+        // console.log(num)
+        process.exit(1);
+    }
+}
+/* basic function of getting json from api, filter and video number check */
+/*
+    check if the directory exists, if not, create the folder recursively, or error if failed.
+*/
+function checkVaildDirectory(path) {
+    return __awaiter(this, void 0, void 0, function () {
+        var isDir;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fs.promises.stat(path)];
+                case 1:
+                    isDir = (_a.sent()).isDirectory();
+                    if (isDir) {
+                        return [2 /*return*/, Promise.resolve()];
+                    }
+                    fs.promises.mkdir(path, { recursive: true }).catch(function (error) {
+                        console.error("Can't create folder: " + error);
+                        return Promise.reject(error);
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+/*
     write a json document with string
 */
 function writeToJson(path, title, data) {
@@ -93,6 +138,7 @@ function writeToJson(path, title, data) {
         return __generator(this, function (_a) {
             return [2 /*return*/, new Promise(function (resolve, reject) {
                     try {
+                        checkVaildDirectory(path);
                         // const jsonData = JSON.parse(data)
                         console.log(data);
                         var jsonString = JSON.stringify(data, null, 2);
@@ -116,27 +162,6 @@ function writeToJson(path, title, data) {
                 })];
         });
     });
-}
-/*
-    check the aid and bvid number, if error, just throw error.
-*/
-function vidNoCheck(bvid) {
-    var letter = bvid.substring(0, 2).toLowerCase();
-    var num = bvid.substring(2);
-    if (letter === "bv") {
-        var api_bv = api.concat("bvid=").concat(bvid);
-        return api_bv;
-    }
-    else if (letter === "av") {
-        var api_av = api.concat("aid=").concat(num);
-        return api_av;
-    }
-    else {
-        console.error('You should put avid and bvid');
-        // console.log(letter)
-        // console.log(num)
-        process.exit(1);
-    }
 }
 function main(args) {
     if (args.length != 1) {

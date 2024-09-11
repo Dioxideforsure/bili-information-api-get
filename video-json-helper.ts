@@ -78,12 +78,27 @@ function vidNoCheck(bvid:string): string {
 /* basic function of getting json from api, filter and video number check */
 
 /* 
+    check if the directory exists, if not, create the folder recursively, or error if failed.
+*/
+async function checkVaildDirectory(path: string): Promise<void>{
+    const isDir: boolean = (await fs.promises.stat(path)).isDirectory()
+    if (isDir) {
+        return Promise.resolve()
+    }
+    fs.promises.mkdir(path, {recursive: true}).catch((error) =>{
+        console.error(`Can't create folder: `+ error)
+        return Promise.reject(error)
+    })
+}
+
+/* 
     write a json document with string
 */
     
 async function writeToJson(path: string, title: string, data: JSON): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
+            checkVaildDirectory(path)
             // const jsonData = JSON.parse(data)
             console.log(data)
             const jsonString = JSON.stringify(data, null, 2)
