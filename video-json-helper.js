@@ -77,10 +77,23 @@ function replacer(key, value) {
         return undefined;
     }
     if (key === 'data') {
-        return { bvid: value.bvid, videos: value.videos, tname: value.tname, pic: value.pic, title: value.title,
-            pubdate: value.pubdate, desc: value.desc, duration: value.duration, name: value.owner.name,
-            view: value.stat.view, danmuku: value.stat.danmuku, reply: value.stat.reply, favorite: value.stat.favorite,
-            coin: value.stat.coin, share: value.stat.share, like: value.stat.like
+        return {
+            bvid: value.bvid,
+            videos: value.videos,
+            tname: value.tname,
+            pic: value.pic,
+            title: value.title,
+            pubdate: value.pubdate,
+            desc: value.desc,
+            duration: value.duration,
+            name: value.owner.name,
+            view: value.stat.view,
+            danmuku: value.stat.danmuku,
+            reply: value.stat.reply,
+            favorite: value.stat.favorite,
+            coin: value.stat.coin,
+            share: value.stat.share,
+            like: value.stat.like,
         };
     }
     return value;
@@ -91,12 +104,12 @@ function replacer(key, value) {
 function vidNoCheck(bvid) {
     var letter = bvid.substring(0, 2).toLowerCase();
     var num = bvid.substring(2);
-    if (letter === "bv") {
-        var api_bv = api.concat("bvid=").concat(bvid);
+    if (letter === 'bv') {
+        var api_bv = api.concat('bvid=').concat(bvid);
         return api_bv;
     }
-    else if (letter === "av") {
-        var api_av = api.concat("aid=").concat(num);
+    else if (letter === 'av') {
+        var api_av = api.concat('aid=').concat(num);
         return api_av;
     }
     else {
@@ -112,20 +125,30 @@ function vidNoCheck(bvid) {
 */
 function checkVaildDirectory(path) {
     return __awaiter(this, void 0, void 0, function () {
-        var isDir;
+        var error_2, errorDocument_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, fs.promises.stat(path)];
+                case 0:
+                    _a.trys.push([0, 2, , 7]);
+                    return [4 /*yield*/, fs.promises.stat(path)];
                 case 1:
-                    isDir = (_a.sent()).isDirectory();
-                    if (isDir) {
-                        return [2 /*return*/, Promise.resolve()];
-                    }
-                    fs.promises.mkdir(path, { recursive: true }).catch(function (error) {
-                        console.error("Can't create folder: " + error);
-                        return Promise.reject(error);
-                    });
-                    return [2 /*return*/];
+                    _a.sent();
+                    return [2 /*return*/, Promise.resolve()];
+                case 2:
+                    error_2 = _a.sent();
+                    _a.label = 3;
+                case 3:
+                    _a.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, fs.promises.mkdir(path, { recursive: true })];
+                case 4:
+                    _a.sent();
+                    return [2 /*return*/, Promise.resolve()];
+                case 5:
+                    errorDocument_1 = _a.sent();
+                    console.error("Can't create folder: " + errorDocument_1);
+                    return [2 /*return*/, Promise.reject(errorDocument_1)];
+                case 6: return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });
@@ -135,31 +158,44 @@ function checkVaildDirectory(path) {
 */
 function writeToJson(path, title, data) {
     return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
         return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve, reject) {
-                    try {
-                        checkVaildDirectory(path);
-                        // const jsonData = JSON.parse(data)
-                        console.log(data);
-                        var jsonString = JSON.stringify(data, null, 2);
-                        var p = path.concat("/".concat(title, ".json"));
-                        // console.log(data)
-                        fs.writeFile(p, jsonString, 'utf8', function (error) {
-                            if (error) {
-                                console.error("Error writing JSON File: ".concat(error));
-                                reject(error);
-                            }
-                            else {
-                                console.log("JSON has been written successfully.");
-                                resolve();
-                            }
-                        });
-                    }
-                    catch (parseError) {
-                        console.log("Error parsing JSON string: ", parseError);
-                        reject();
-                    }
-                })];
+            return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var jsonString, p, parseError_1;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                _a.trys.push([0, 2, , 3]);
+                                return [4 /*yield*/, checkVaildDirectory(path)
+                                    // const jsonData = JSON.parse(data)
+                                ];
+                            case 1:
+                                _a.sent();
+                                // const jsonData = JSON.parse(data)
+                                console.log(data);
+                                jsonString = JSON.stringify(data, null, 2);
+                                p = path.concat("/".concat(title, ".json"));
+                                // console.log(data)
+                                fs.writeFile(p, jsonString, 'utf8', function (error) {
+                                    if (error) {
+                                        console.error("Error writing JSON File: ".concat(error));
+                                        reject(error);
+                                    }
+                                    else {
+                                        console.log('JSON has been written successfully.');
+                                        resolve();
+                                    }
+                                });
+                                return [3 /*break*/, 3];
+                            case 2:
+                                parseError_1 = _a.sent();
+                                console.log("Error parsing JSON string: ", parseError_1);
+                                reject();
+                                return [3 /*break*/, 3];
+                            case 3: return [2 /*return*/];
+                        }
+                    });
+                }); })];
         });
     });
 }
@@ -169,7 +205,7 @@ function main(args) {
         process.exit(1);
     }
     try {
-        var pa_1 = path.join(__dirname, "jsonfile");
+        var pa_1 = path.join(__dirname, 'jsonfile');
         var title_1 = args[0];
         fetchData(vidNoCheck(args[0])).then(function (jsonData) {
             writeToJson(pa_1, title_1, jsonData);
