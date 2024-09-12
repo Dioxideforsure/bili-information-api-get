@@ -37,8 +37,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
-var path = require("path");
+/*
+    address of api
+*/
 var api = "https://api.bilibili.com/x/web-interface/view?";
+function fulfillI(jsonData) {
+    return jsonData;
+}
+function printI(va) {
+    console.log(va);
+}
 /*
     Access Internet for json content
 */
@@ -199,21 +207,24 @@ function writeToJson(path, title, data) {
         });
     });
 }
+/* write to a file */
 function main(args) {
     if (args.length != 1) {
         console.error('Usage: node helper.js <arg>');
         process.exit(1);
     }
-    try {
-        var pa_1 = path.join(__dirname, 'jsonfile');
-        var title_1 = args[0];
-        fetchData(vidNoCheck(args[0])).then(function (jsonData) {
-            writeToJson(pa_1, title_1, jsonData);
-        });
-    }
-    catch (error) {
-        console.error('Error: ' + error);
-    }
+    /* try {
+      const pa = path.join(__dirname, 'jsonfile')
+      const title = args[0]
+      fetchData(vidNoCheck(args[0])).then((jsonData) => {
+        writeToJson(pa, title, jsonData)
+      })
+    } catch (error) {
+      console.error('Error: ' + error)
+    } */
+    fetchData(vidNoCheck(args[0])).then(function (x) {
+        printI(fulfillI(x));
+    });
 }
 var arg = process.argv.slice(2);
 main(arg);

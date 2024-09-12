@@ -2,18 +2,52 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 /* 
+    address of api
+*/
+
+const api: string = `https://api.bilibili.com/x/web-interface/view?`
+
+/* 
     Api information
 */
+
 interface video_access {
   // identify
   // readonly bvid:string
   // status
   readonly code: number
   readonly message: string
+  data?: {
+    videos: number
+    tname: string
+    pic: string
+    title: string
+    time: number
+    duration: number
+    desc: string
+    // author information
+    name: string
+    // viewer interaction information
+    viewer: number
+    danmuku: number
+    reply: number
+    like: number
+    coin: number
+    share: number
+    favorite: number
+  }
   // get address
 }
 
-const api: string = `https://api.bilibili.com/x/web-interface/view?`
+function fulfillI(jsonData: JSON): video_access {
+  return jsonData as unknown as video_access
+}
+
+function printI(va: video_access): void {
+  console.log(va)
+}
+
+
 
 /* 
     Access Internet for json content
@@ -138,12 +172,14 @@ async function writeToJson(
   })
 }
 
+/* write to a file */
+
 function main(args: string[]) {
   if (args.length != 1) {
     console.error('Usage: node helper.js <arg>')
     process.exit(1)
   }
-  try {
+  /* try {
     const pa = path.join(__dirname, 'jsonfile')
     const title = args[0]
     fetchData(vidNoCheck(args[0])).then((jsonData) => {
@@ -151,7 +187,10 @@ function main(args: string[]) {
     })
   } catch (error) {
     console.error('Error: ' + error)
-  }
+  } */
+ fetchData(vidNoCheck(args[0])).then(x => {
+  printI(fulfillI(x))
+ })
 }
 
 const arg = process.argv.slice(2)
