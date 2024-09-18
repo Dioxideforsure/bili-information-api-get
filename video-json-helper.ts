@@ -18,6 +18,7 @@ interface video_access {
   readonly code: number
   readonly message: string
   data?: {
+    // bvid: string
     videos: number
     tname: string
     pic: string
@@ -47,7 +48,27 @@ function printI(va: video_access): void {
   console.log(va)
 }
 
+/* 
+    verify the url
+*/
 
+function verifyURL(urlIf: string): string {
+  try {
+    const url = new URL(urlIf)
+    if (
+      url.hostname === 'www.bilibili.com' ||
+      url.hostname === 'bilibili.com'
+    ) {
+      let bvid = url.pathname
+      // console.log(bvid.substring(7, bvid.length - 2))
+      return vidNoCheck(bvid.substring(7, bvid.length - 1))
+    }
+  } catch (error) {
+    console.log(`Not a valid address, verify whether bvid`)
+    return vidNoCheck(urlIf)
+  }
+  return vidNoCheck(urlIf)
+}
 
 /* 
     Access Internet for json content
@@ -107,6 +128,7 @@ function vidNoCheck(bvid: string): string {
   const num: string = bvid.substring(2)
   if (letter === 'bv') {
     let api_bv: string = api.concat('bvid=').concat(bvid)
+    // console.log(api_bv)
     return api_bv
   } else if (letter === 'av') {
     let api_av: string = api.concat('aid=').concat(num)
@@ -152,7 +174,7 @@ async function writeToJson(
     try {
       await checkVaildDirectory(path)
       // const jsonData = JSON.parse(data)
-      console.log(data)
+      // console.log(data)
       const jsonString = JSON.stringify(data, null, 2)
       const p = path.concat(`/${title}.json`)
       // console.log(data)
@@ -188,9 +210,12 @@ function main(args: string[]) {
   } catch (error) {
     console.error('Error: ' + error)
   } */
- fetchData(vidNoCheck(args[0])).then(x => {
-  printI(fulfillI(x))
- })
+  let a: video_access
+  fetchData(verifyURL(args[0])).then((x) => {
+    a = fulfillI(x)
+    console.log(a.data)
+    // printI(a)
+  })
 }
 
 const arg = process.argv.slice(2)

@@ -48,6 +48,24 @@ function printI(va) {
     console.log(va);
 }
 /*
+    verify the url
+*/
+function verifyURL(urlIf) {
+    try {
+        var url = new URL(urlIf);
+        if (url.hostname === "www.bilibili.com" || url.hostname === "bilibili.com") {
+            var bvid = url.pathname;
+            // console.log(bvid.substring(7, bvid.length - 2))
+            return vidNoCheck(bvid.substring(7, bvid.length - 1));
+        }
+    }
+    catch (error) {
+        console.log("Not a valid address, verify whether bvid");
+        return vidNoCheck(urlIf);
+    }
+    return vidNoCheck(urlIf);
+}
+/*
     Access Internet for json content
 */
 function fetchData(url) {
@@ -114,6 +132,7 @@ function vidNoCheck(bvid) {
     var num = bvid.substring(2);
     if (letter === 'bv') {
         var api_bv = api.concat('bvid=').concat(bvid);
+        console.log(api_bv);
         return api_bv;
     }
     else if (letter === 'av') {
@@ -176,11 +195,10 @@ function writeToJson(path, title, data) {
                                 _a.trys.push([0, 2, , 3]);
                                 return [4 /*yield*/, checkVaildDirectory(path)
                                     // const jsonData = JSON.parse(data)
+                                    // console.log(data)
                                 ];
                             case 1:
                                 _a.sent();
-                                // const jsonData = JSON.parse(data)
-                                console.log(data);
                                 jsonString = JSON.stringify(data, null, 2);
                                 p = path.concat("/".concat(title, ".json"));
                                 // console.log(data)
@@ -222,8 +240,11 @@ function main(args) {
     } catch (error) {
       console.error('Error: ' + error)
     } */
-    fetchData(vidNoCheck(args[0])).then(function (x) {
-        printI(fulfillI(x));
+    var a;
+    fetchData(verifyURL(args[0])).then(function (x) {
+        a = fulfillI(x);
+        console.log(a.data);
+        // printI(a)
     });
 }
 var arg = process.argv.slice(2);
