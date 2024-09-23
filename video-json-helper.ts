@@ -23,7 +23,7 @@ interface video_access {
     tname: string
     pic: string
     title: string
-    ctime: number
+    pubdate: number
     duration: number
     desc: string
     // author information
@@ -103,7 +103,7 @@ function replacer(key: string, value: any): any {
       tname: value.tname,
       pic: value.pic,
       title: value.title,
-      ctime: value.ctime,
+      pubdate: value.pubdate,
       desc: value.desc,
       duration: value.duration,
       name: value.owner.name,
