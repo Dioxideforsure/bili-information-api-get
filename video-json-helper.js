@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
+var path = require("path");
 /*
     address of api
 */
@@ -53,7 +54,8 @@ function printI(va) {
 function verifyURL(urlIf) {
     try {
         var url = new URL(urlIf);
-        if (url.hostname === "www.bilibili.com" || url.hostname === "bilibili.com") {
+        if (url.hostname === 'www.bilibili.com' ||
+            url.hostname === 'bilibili.com') {
             var bvid = url.pathname;
             // console.log(bvid.substring(7, bvid.length - 2))
             return vidNoCheck(bvid.substring(7, bvid.length - 1));
@@ -132,7 +134,7 @@ function vidNoCheck(bvid) {
     var num = bvid.substring(2);
     if (letter === 'bv') {
         var api_bv = api.concat('bvid=').concat(bvid);
-        console.log(api_bv);
+        // console.log(api_bv)
         return api_bv;
     }
     else if (letter === 'av') {
@@ -231,21 +233,22 @@ function main(args) {
         console.error('Usage: node helper.js <arg>');
         process.exit(1);
     }
-    /* try {
-      const pa = path.join(__dirname, 'jsonfile')
-      const title = args[0]
-      fetchData(vidNoCheck(args[0])).then((jsonData) => {
-        writeToJson(pa, title, jsonData)
-      })
-    } catch (error) {
-      console.error('Error: ' + error)
-    } */
-    var a;
-    fetchData(verifyURL(args[0])).then(function (x) {
-        a = fulfillI(x);
-        console.log(a.data);
-        // printI(a)
-    });
+    try {
+        var pa_1 = path.join(__dirname, 'jsonfile');
+        var title_1 = args[0];
+        fetchData(vidNoCheck(args[0])).then(function (jsonData) {
+            writeToJson(pa_1, title_1, jsonData);
+        });
+    }
+    catch (error) {
+        console.error('Error: ' + error);
+    }
+    /* let a: video_access
+    fetchData(verifyURL(args[0])).then((x) => {
+      a = fulfillI(x)
+      console.log(a.data)
+      // printI(a)
+    }) */
 }
 var arg = process.argv.slice(2);
 main(arg);

@@ -23,7 +23,7 @@ interface video_access {
     tname: string
     pic: string
     title: string
-    time: number
+    ctime: number
     duration: number
     desc: string
     // author information
@@ -103,7 +103,7 @@ function replacer(key: string, value: any): any {
       tname: value.tname,
       pic: value.pic,
       title: value.title,
-      pubdate: value.pubdate,
+      ctime: value.ctime,
       desc: value.desc,
       duration: value.duration,
       name: value.owner.name,
@@ -201,7 +201,7 @@ function main(args: string[]) {
     console.error('Usage: node helper.js <arg>')
     process.exit(1)
   }
-  /* try {
+  try {
     const pa = path.join(__dirname, 'jsonfile')
     const title = args[0]
     fetchData(vidNoCheck(args[0])).then((jsonData) => {
@@ -209,13 +209,13 @@ function main(args: string[]) {
     })
   } catch (error) {
     console.error('Error: ' + error)
-  } */
-  let a: video_access
+  }
+  /* let a: video_access
   fetchData(verifyURL(args[0])).then((x) => {
     a = fulfillI(x)
     console.log(a.data)
     // printI(a)
-  })
+  }) */
 }
 
 const arg = process.argv.slice(2)
